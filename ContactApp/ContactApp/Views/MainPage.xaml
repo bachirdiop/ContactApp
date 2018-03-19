@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ContactApp"
+             x:Class="ContactApp.MainPage">
+
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical" Padding="30" Spacing="25">
+            <BoxView HeightRequest="10" />
+            <Image HorizontalOptions="Center" WidthRequest="300" Source="logo.png" />
+            <Frame BackgroundColor="White" HasShadow="False">
+                <StackLayout Orientation="Vertical" Spacing="10">
+                    <Entry x:Name="Login" Text="{Binding Login}" Placeholder="Your User" PlaceholderColor="Gray"
+                           TextColor="Black" />
+                    <Entry x:Name="Password" Text="{Binding Password}" Placeholder="Your Password"
+                           PlaceholderColor="Gray" TextColor="Black" />
+                </StackLayout>
+            </Frame>
+            <Button Command="{Binding SubmitCommand}" Text="Login" TextColor="Gray" FontAttributes="Bold"
+                    FontSize="Large" HorizontalOptions="FillAndExpand" BackgroundColor="Bisque" />
+        </StackLayout>
+    </ContentPage.Content>
+
+</ContentPage>

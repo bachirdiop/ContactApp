@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ContactApp.Views.ContactPage">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add New" Command="{Binding AddContact}"></ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+       
+        <StackLayout>
+
+            <ScrollView>
+                <ListView x:Name="MyListView1"
+                          ItemsSource="{Binding ListContact}"
+                          RefreshAllowed="True"
+                          HasUnevenRows="True"
+                          RefreshCommand="{Binding LoadItemsCommand}"
+                          IsPullToRefreshEnabled="True"
+                          IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                          CachingStrategy="RetainElement">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.ContextActions>
+                                    <MenuItem Command="{Binding Path=BindingContext.OnEdit, Source = {x:Reference MyListView1} }" CommandParameter="{Binding}"
+                                              Text="Edit" />
+                                    <MenuItem Command="{Binding Path=BindingContext.OnDelete, Source = {x:Reference MyListView1} }" CommandParameter="{Binding}"
+                                              Text="Delete" IsDestructive="True" />
+                                </ViewCell.ContextActions>
+                                <StackLayout Orientation="Horizontal" HeightRequest="150">
+                                    
+                                    <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+
+                                        <Image Source="{Binding ImgSource}" HeightRequest="100" />
+                                    </StackLayout>
+                                    <StackLayout Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Center">
+                                        <Label Text="{Binding Name}" />
+                                        <Label Text="{Binding CellNumber}" />
+                                    </StackLayout>
+                                    <StackLayout HorizontalOptions="End" VerticalOptions="End">
+                                        <Image Source="navigate.png"  HeightRequest="25" WidthRequest="25">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding Path=BindingContext.ItemTapped, Source = {x:Reference MyListView1} }" CommandParameter="{Binding}" />
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                    </StackLayout>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+
+
+                </ListView>
+            </ScrollView>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

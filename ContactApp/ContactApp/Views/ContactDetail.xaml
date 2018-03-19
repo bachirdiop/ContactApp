@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ContactApp.Views.ContactDetail">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Edit" Command="{Binding Path=EditContact}" CommandParameter="{Binding Itemnew}"></ToolbarItem>
+        <ToolbarItem Text="Delete" Command="{Binding Path=DeleteContact}"></ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <StackLayout>
+            <Image  Source="{Binding Itemnew.ImgSource}"  />
+            <Label  Text="{Binding Itemnew.Name}" />
+            <Label  Text="{Binding Itemnew.CellNumber}" />
+        </StackLayout>
+
+    </ContentPage.Content>
+</ContentPage>

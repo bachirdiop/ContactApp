@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using System.Windows.Input;
 using ContactApp.Models;
 using ContactApp.Views;
@@ -10,25 +7,11 @@ using Xamarin.Forms.Internals;
 
 namespace ContactApp.ViewModels
 {
-    class EditContactViewModel : BaseViewModel
+    internal class EditContactViewModel : BaseViewModel
     {
+        private ICommand _addContact;
         private Contact _itemnew;
 
-        public Contact Itemnew
-        {
-            get => _itemnew;
-            set => SetProperty(ref _itemnew, value);
-        }
-
-        private ICommand _addContact;
-        public ICommand SaveContact
-        {
-            get => _addContact;
-            set => SetProperty(ref _addContact, value);
-        }
-       
-
-     
 
         public EditContactViewModel(Contact ctparam = null)
         {
@@ -41,15 +24,15 @@ namespace ContactApp.ViewModels
                 ImgSource = ImageSource.FromResource("ContactApp.Images.profile.png")
             };
 
-            this.Nav = new NavigationProxy();
-            this.CurrentPage = new EditContact();
+            Nav = new NavigationProxy();
+            CurrentPage = new EditContact();
             if (CurrentPage != null)
             {
                 CurrentPage.BindingContext = this;
             }
             else if (CurrentPage == null)
             {
-                this.CurrentPage = new EditContact();
+                CurrentPage = new EditContact();
                 CurrentPage.BindingContext = this;
             }
         }
@@ -66,14 +49,14 @@ namespace ContactApp.ViewModels
                 ImgSource = ImageSource.FromResource("ContactApp.Images.profile.png")
             };
 
-            this.Nav = navi;
+            Nav = navi;
             if (CurrentPage != null)
             {
                 CurrentPage.BindingContext = this;
             }
             else if (CurrentPage == null)
             {
-                this.CurrentPage = new EditContact();
+                CurrentPage = new EditContact();
                 CurrentPage.BindingContext = this;
             }
         }
@@ -89,15 +72,15 @@ namespace ContactApp.ViewModels
                 ImgSource = ImageSource.FromResource("ContactApp.Images.profile.png")
             };
 
-            this.Nav = navi;
-            this.CurrentPage = page1;
+            Nav = navi;
+            CurrentPage = page1;
             if (CurrentPage != null)
             {
                 CurrentPage.BindingContext = this;
             }
             else if (CurrentPage == null)
             {
-                this.CurrentPage = new EditContact();
+                CurrentPage = new EditContact();
                 CurrentPage.BindingContext = this;
             }
         }
@@ -113,25 +96,36 @@ namespace ContactApp.ViewModels
                 ImgSource = ImageSource.FromResource("ContactApp.Images.profile.png")
             };
 
-            this.CurrentPage = page1;
+            CurrentPage = page1;
             if (CurrentPage != null)
             {
                 CurrentPage.BindingContext = this;
             }
             else if (CurrentPage == null)
             {
-                this.CurrentPage = new EditContact();
+                CurrentPage = new EditContact();
                 CurrentPage.BindingContext = this;
             }
         }
 
+        public Contact Itemnew
+        {
+            get => _itemnew;
+            set => SetProperty(ref _itemnew, value);
+        }
+
+        public ICommand SaveContact
+        {
+            get => _addContact;
+            set => SetProperty(ref _addContact, value);
+        }
+
         public void Handle_AddContact()
         {
-            var _item = Itemnew as Contact;
+            var _item = Itemnew;
             MessagingCenter.Send(this, "EditItem", _item);
             MessagingCenter.Send(this, "EditViewItem", _item);
-            this.Nav.PopAsync();
-
+            Nav.PopAsync();
         }
     }
 }

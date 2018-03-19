@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ContactApp.Services
+﻿namespace ContactApp.Services
 {
-    class LoginService
+    internal class LoginService
     {
         public static bool Login(string login, string password)
         {

@@ -1,19 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 using Xamarin.Forms;
 
 namespace ContactApp.Models
 {
     public class Contact
     {
+        private string _cellNumber;
+        private ImageSource _imgSource;
 
         private string _name;
-        private string _cellNumber;
-        private string _id;
-        private ImageSource _imgSource;
+
+        public Contact(string nm, string cn)
+        {
+            Id = Guid.NewGuid().ToString();
+            Name = nm;
+            CellNumber = cn;
+            ImgSource = ImageSource.FromResource("ContactApp.Images.profile.png");
+        }
+
+        public Contact()
+        {
+            var r = new Random();
+            Id = Guid.NewGuid().ToString();
+            Name = "Contact " + r.Next();
+            CellNumber = r.Next() + " - " + r.Next();
+            ImgSource = ImageSource.FromResource("Images.profile.png");
+        }
 
         public string Name
         {
@@ -25,7 +39,6 @@ namespace ContactApp.Models
                 OnPropertyChanged(nameof(Name));
             }
         }
-
 
 
         public string CellNumber
@@ -50,27 +63,10 @@ namespace ContactApp.Models
             }
         }
 
-        public string Id { get => _id; set => _id = value; }
-
-        public Contact(string nm, string cn)
-        {
-            Id = Guid.NewGuid().ToString();
-            Name = nm;
-            CellNumber = cn;
-            ImgSource = ImageSource.FromResource("ContactApp.Images.profile.png");
-        }
-
-        public Contact()
-        {
-            Random r = new Random();
-            Id = Guid.NewGuid().ToString();
-            Name = "Contact " + r.Next().ToString();
-            CellNumber = r.Next().ToString() + " - " + r.Next().ToString();
-            ImgSource = ImageSource.FromResource("Images.profile.png");
-        }
+        public string Id { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        
+
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

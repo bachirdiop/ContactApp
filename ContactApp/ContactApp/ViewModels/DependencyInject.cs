@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
 
 namespace ContactApp.ViewModels
@@ -9,8 +7,7 @@ namespace ContactApp.ViewModels
     {
         public static T Get()
         {
-            return DependencyService.Get<T>() ?? (T)Activator.CreateInstance(typeof(T), new object[] { });
+            return DependencyService.Get<T>() ?? (T) Activator.CreateInstance(typeof(T), new object[] { });
         }
-
     }
 }

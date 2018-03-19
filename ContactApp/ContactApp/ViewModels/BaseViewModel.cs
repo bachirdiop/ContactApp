@@ -4,42 +4,50 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using ContactApp.Models;
-using ContactApp.Services;
-using ContactApp.Views;
+using SL;
 using Xamarin.Forms;
-using Xamarin.Forms.Internals;
 
 namespace ContactApp.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
+        private Page _currentPage;
 
-        public IDataStore<Contact> DataStore => DependencyService.Get<IDataStore<Contact>>() ?? new ContactService();
-        Random r = new Random();
+        private Action<string, string> _displayInfoAction;
 
-        bool _isBusy = false;
+        private bool _isBusy;
+
+
+        private INavigation _nav;
+
+        private string _title = string.Empty;
+
+        private Random r = new Random();
+
+        public BaseViewModel()
+        {
+            ContactList.CreateTableAsync21();
+        }
+
+        public IDataStore<Contact> ContactList =>
+            DependencyInject<IDataStore<Contact>>.Get() ?? new DataStore<Contact>("DataBase.db3");
+
         public bool IsBusy
         {
             get => _isBusy;
             set => SetProperty(ref _isBusy, value);
         }
 
-        string _title = string.Empty;
         public string Title
         {
             get => _title;
             set => SetProperty(ref _title, value);
         }
 
-        
-        
+
         public Command LoadItemsCommand { get; set; }
-        
-        
-        private INavigation _nav;
 
         public INavigation Nav
         {
@@ -47,11 +55,17 @@ namespace ContactApp.ViewModels
             set => SetProperty(ref _nav, value);
         }
 
-        private Page _currentPage;
-        public Page CurrentPage { get => _currentPage; set => SetProperty(ref _currentPage, value); }
+        public Page CurrentPage
+        {
+            get => _currentPage;
+            set => SetProperty(ref _currentPage, value);
+        }
 
-        private Action<string, string> _displayInfoAction;
-        public Action<string, string> DisplayInfoAction { get => _displayInfoAction; set => SetProperty(ref _displayInfoAction, value); }
+        public Action<string, string> DisplayInfoAction
+        {
+            get => _displayInfoAction;
+            set => SetProperty(ref _displayInfoAction, value);
+        }
 
         public void OpenPage()
         {
@@ -81,11 +95,8 @@ namespace ContactApp.ViewModels
             try
             {
                 lst.Clear();
-                var items = await DataStore.GetContactListAsync(true);
-                foreach (var item in items)
-                {
-                    lst.Add(item);
-                }
+                var items = await ContactList.GetAllAsync();
+                foreach (var item in items) lst.Add(item);
             }
             catch (Exception ex)
             {
@@ -98,10 +109,8 @@ namespace ContactApp.ViewModels
         }
 
 
-     
-
         protected bool SetProperty<T>(ref T backingStore, T value,
-            [CallerMemberName]string propertyName = "",
+            [CallerMemberName] string propertyName = "",
             Action onChanged = null)
         {
             if (EqualityComparer<T>.Default.Equals(backingStore, value))
@@ -114,7 +123,9 @@ namespace ContactApp.ViewModels
         }
 
         #region INotifyPropertyChanged
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             var changed = PropertyChanged;
@@ -123,6 +134,7 @@ namespace ContactApp.ViewModels
 
             changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
         #endregion
     }
 }

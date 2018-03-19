@@ -6,43 +6,41 @@ using System.Threading.Tasks;
 using ContactApp.ViewModels;
 using Xamarin.Forms;
 
-namespace ContactApp
+namespace ContactApp.Views
 {
-	public partial class MainPage : ContentPage
-	{
+    public class MainPage : ContentPage
+    {
+        public MainPage(MainPageViewModel invm)
+        {
+            var vm = invm;
+            vm.Nav = Navigation;
 
-		public MainPage(MainPageViewModel invm)
-		{
-		    var vm = invm;
-		    vm.Nav = Navigation;
+            var p1 = new ContactViewModel(vm.Nav);
+            //p1.CurrentPage.BindingContext = p1;
 
-		    var p1 = new ContactViewModel(vm.Nav);
-		    //p1.CurrentPage.BindingContext = p1;
-            
-		    vm.DisplayLoginPrompt += (s, s1) => DisplayAlert(s, s1, "OK");
-		    vm.DisplayContactAction += () =>
-		    {
-		        p1.CurrentPage.Appearing += (sender, args) =>
-		        {
-		            base.OnAppearing();
+            vm.DisplayLoginPrompt += (s, s1) => DisplayAlert(s, s1, "OK");
+            vm.DisplayContactAction += () =>
+            {
+                p1.CurrentPage.Appearing += (sender, args) =>
+                {
+                    OnAppearing();
 
-		            if (p1.ListContact.Count == 0)
-		                p1.LoadItemsCommand.Execute(null);
-                }; 
-		        NavigationPage.SetHasBackButton(p1.CurrentPage, false);
-		        //NavigationPage.SetHasNavigationBar(p1.CurrentPage, false);
-		        vm.Nav.PushAsync(p1.CurrentPage);
-		        //Navigation.RemovePage(this);
+                    if (p1.ListContact.Count == 0)
+                        p1.LoadItemsCommand.Execute(null);
+                };
+                NavigationPage.SetHasBackButton(p1.CurrentPage, false);
+                //NavigationPage.SetHasNavigationBar(p1.CurrentPage, false);
+                vm.Nav.PushAsync(p1.CurrentPage);
+                //Navigation.RemovePage(this);
+            };
 
-		    };
-
-		    BindingContext = vm;
+            BindingContext = vm;
 
             InitializeComponent();
 
 
-		    NavigationPage.SetHasBackButton(this, false);
-		    NavigationPage.SetHasNavigationBar(this, false);
+            NavigationPage.SetHasBackButton(this, false);
+            NavigationPage.SetHasNavigationBar(this, false);
         }
-	}
+    }
 }
